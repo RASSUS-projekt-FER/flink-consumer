@@ -11,3 +11,15 @@ flink run -c org.example.WordCount /path/to/your/project/my-app/target/scala-2.1
 
 You can also run your application from within IntelliJ:  select the classpath of the 'mainRunner' module in the run/debug configurations.
 Simply open 'Run -> Edit configurations...' and then select 'mainRunner' from the "Use classpath of module" dropbox. 
+
+---
+
+### Ubuntu - start/stop Flink
+nc -l 9000  
+(new terminal) ./bin/flink run examples/streaming/SocketWindowWordCount.jar --port 9000  
+(stop cluster) ./bin/stop-cluster.sh  
+
+### Windows - start/stop Flink
+ncat -l 9000  
+(new terminal) flink-1.7.0\bin\flink run flink-consumer\target\scala-2.11\flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000   
+(stop cluster) flink-1.7.0\bin\stop-cluster.bat
