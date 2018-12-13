@@ -14,12 +14,14 @@ Simply open 'Run -> Edit configurations...' and then select 'mainRunner' from th
 
 ---
 
-### Ubuntu - start/stop Flink
+### Dominik - start/stop Flink
 nc -l 9000  
-(new terminal) ./bin/flink run examples/streaming/SocketWindowWordCount.jar --port 9000  
+(new terminal) ../flink-1.7.0/bin/flink run target/scala-2.11/flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000  
+(new terminal) tail ../flink-1.7.0/log/flink-*-taskexecutor-*.out -f  
 (stop cluster) ./bin/stop-cluster.sh  
 
-### Windows - start/stop Flink
+### Filip - start/stop Flink
 ncat -l 9000  
 (new terminal) flink-1.7.0\bin\flink run flink-consumer\target\scala-2.11\flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000   
+(new terminal) tail ?
 (stop cluster) flink-1.7.0\bin\stop-cluster.bat
