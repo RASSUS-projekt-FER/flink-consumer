@@ -23,3 +23,8 @@
 hs_err_pid*
 .idea/
 *.iml
+
+mainRunner/*
+project/project/*
+project/target/*
+target/*
