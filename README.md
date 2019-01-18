@@ -19,4 +19,4 @@ nc -l 9000
 
 (terminal 2) ncat -l 9000 
 
-{"name": "cpuUsage", "value": "40", "device": {"id": "id-0", "name": "device-0"}}
+{"value": 40.0, "deviceName": "device-0"}
