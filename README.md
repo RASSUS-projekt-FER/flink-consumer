@@ -7,7 +7,7 @@ Package the application into a fat jar with `sbt assembly`, then submit it to Fl
 ---
 
 ### Dominik - start/stop Flink
-Note: read in raw because md formats text
+Note: read in raw because md formats text  
 nc -l 9000  
 <run cd ~/Desktop/rassus/flink-1.7.0/ for every remaining terminal window>  
 (new terminal) bin/start-cluster.sh  
