@@ -11,7 +11,7 @@ Note: read in raw because md formats text
 nc -l 9000  
 <run cd ~/Desktop/rassus/flink-1.7.0/ for every remaining terminal window>  
 (new terminal) bin/start-cluster.sh  
-(new terminal) ~/Dropbox/7.\ semestar/Raspodijeljeni\ sustavi/Lab/flink-consumer/target/scala-2.11/flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000  
+(new terminal) bin/flink run ~/Dropbox/7.\ semestar/Raspodijeljeni\ sustavi/Lab/flink-consumer/target/scala-2.11/flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000  
 (new terminal) tail log/flink-*-taskexecutor-*.out -f  
 <do your work...>  
 (new terminal) bin/stop-cluster.sh  
