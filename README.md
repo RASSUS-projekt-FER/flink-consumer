@@ -8,11 +8,11 @@ Package the application into a fat jar with `sbt assembly`, then submit it to Fl
 
 ### Dominik - start/stop Flink
 nc -l 9000  
-<run cd ~/Desktop/rassus/flink-1.7.0/ for every remaining terminal window>
-(new terminal) bin/start-cluster.sh
+<run cd ~/Desktop/rassus/flink-1.7.0/ for every remaining terminal window>  
+(new terminal) bin/start-cluster.sh  
 (new terminal) bin/flink run target/scala-2.11/flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000  
 (new terminal) tail log/flink-*-taskexecutor-*.out -f  
-<do your work...>
+<do your work...>  
 (new terminal) bin/stop-cluster.sh  
 
 ### Windows - start/stop Flink
