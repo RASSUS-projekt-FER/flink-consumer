@@ -1,4 +1,4 @@
-package hr.fer.rassus.flink_consumer.flink.functions.aggregate
+package hr.fer.rassus.flink_consumer.functions.aggregate
 
 import hr.fer.rassus.flink_consumer.KafkaMessage
 import org.apache.flink.api.common.functions.AggregateFunction
@@ -22,6 +22,6 @@ class AverageAggregate extends AggregateFunction[KafkaMessage, AverageAccumulato
 }
 
 object AverageAggregate extends AggregationTypeGetter {
-  override def getAggregationType(): String = "AVERAGE"
+  def getAggregationType(): String = "avg"
   def create(): AverageAggregate = new AverageAggregate
 }

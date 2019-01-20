@@ -1,4 +1,4 @@
-package hr.fer.rassus.flink_consumer.flink.functions.process.window
+package hr.fer.rassus.flink_consumer.functions.process.window
 
 import hr.fer.rassus.flink_consumer.AggregatedMetric
 import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction

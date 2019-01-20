@@ -16,7 +16,8 @@ val flinkVersion = "1.7.0"
 val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
-  "io.spray" %%  "spray-json" % "1.3.5"
+  "io.spray" %%  "spray-json" % "1.3.5",
+  "org.scalaj" % "scalaj-http_2.11" % "2.3.0"
 )
 
 lazy val root = (project in file(".")).

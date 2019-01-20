@@ -12,9 +12,9 @@ nc -l 9000
 (new terminal) tail ../flink-1.7.0/log/flink-*-taskexecutor-*.out -f  
 (stop cluster) ./bin/stop-cluster.sh  
 
-### Windows - start/stop Flink
-(terminal 1) cd flink-1.7.0
-(terminal 1) bin\start-cluster.bat
+### Filip - start/stop Flink
+(terminal 1) cd flink-1.7.0  
+(terminal 1) bin\start-cluster.bat  
 (terminal 1) bin\flink run ..\flink-consumer\target\scala-2.11\flink-consumer-assembly-0.1-SNAPSHOT.jar --port 9000
 
 (terminal 2) ncat -l 9000 

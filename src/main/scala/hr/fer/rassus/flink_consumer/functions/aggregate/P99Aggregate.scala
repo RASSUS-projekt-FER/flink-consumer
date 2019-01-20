@@ -1,4 +1,4 @@
-package hr.fer.rassus.flink_consumer.flink.functions.aggregate
+package hr.fer.rassus.flink_consumer.functions.aggregate
 
 import hr.fer.rassus.flink_consumer.KafkaMessage
 import org.apache.flink.api.common.functions.AggregateFunction
@@ -28,6 +28,6 @@ class P99Aggregate extends AggregateFunction[KafkaMessage, P99Accumulator, Doubl
 
 
 object P99Aggregate extends AggregationTypeGetter {
-  override def getAggregationType(): String = "P99"
+  def getAggregationType(): String = "P99"
   def create(): P99Aggregate = new P99Aggregate
 }
