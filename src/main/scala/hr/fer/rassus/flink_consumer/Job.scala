@@ -2,25 +2,15 @@ package hr.fer.rassus.flink_consumer
 
 import java.util.Properties
 
-import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import spray.json._
 import hr.fer.rassus.flink_consumer.flink.functions.aggregate._
 import hr.fer.rassus.flink_consumer.flink.functions.process.window.AggregatedMetricWrapFunction
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
-import org.apache.flink.streaming.util.serialization.SimpleStringSchema
+import org.apache.flink.streaming.util.serialization.{KeyedDeserializationSchema, SimpleStringSchema}
 
 object Job extends App with ModelJsonProtocol {
-
-  val port: Int = try {
-    ParameterTool.fromArgs(args).getInt("port")
-  } catch {
-    case e: Exception => {
-      System.err.println("No port specified. Please add '--port <port>'")
-      sys.exit(1)
-    }
-  }
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
@@ -28,9 +18,12 @@ object Job extends App with ModelJsonProtocol {
   properties.setProperty("bootstrap.servers", "localhost:9092")
   properties.setProperty("zookeeper.connect", "localhost:2181")
   properties.setProperty("group.id", "test-consumer-group")
+  properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")  // probably wrong
+  properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.DoubleDeserializer")  // probably wrong
 
-  val topicName: String = "cpuTestiranje"  // can also configure list of topics
-  val deserializationSchema = new SimpleStringSchema() // to_do: change to keyeddeserializationschmea
+  val topicName: String = "cpu"  // can also configure list of topics
+  //val deserializationSchema = new KeyedDeserializationSchema[String, Double] {?}(?)
+  val deserializationSchema = new SimpleStringSchema()  // wrong
 
   val cpuUsages = env.addSource(new FlinkKafkaConsumer[String](topicName, deserializationSchema, properties))
 
