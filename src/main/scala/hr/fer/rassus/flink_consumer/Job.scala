@@ -1,11 +1,15 @@
 package hr.fer.rassus.flink_consumer
 
+import java.util.Properties
+
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import spray.json._
 import hr.fer.rassus.flink_consumer.flink.functions.aggregate._
 import hr.fer.rassus.flink_consumer.flink.functions.process.window.AggregatedMetricWrapFunction
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
+import org.apache.flink.streaming.util.serialization.SimpleStringSchema
 
 object Job extends App with ModelJsonProtocol {
 
@@ -20,9 +24,15 @@ object Job extends App with ModelJsonProtocol {
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
-  val metric_name: String = "cpuUsage"
-  //kafka topic about cpuUsage metrics
-  val cpuUsages = env.socketTextStream("localhost", port, '\n')
+  val properties = new Properties()
+  properties.setProperty("bootstrap.servers", "localhost:9092")
+  properties.setProperty("zookeeper.connect", "localhost:2181")
+  properties.setProperty("group.id", "test-consumer-group")
+
+  val topicName: String = "cpuTestiranje"  // can also configure list of topics
+  val deserializationSchema = new SimpleStringSchema() // to_do: change to keyeddeserializationschmea
+
+  val cpuUsages = env.addSource(new FlinkKafkaConsumer[String](topicName, deserializationSchema, properties))
 
   val windowedStream = cpuUsages.map { _.parseJson.convertTo[KafkaMessage] }
     .keyBy(_.deviceName)
@@ -30,22 +40,22 @@ object Job extends App with ModelJsonProtocol {
 
   val averageStream = windowedStream.aggregate(
     AverageAggregate.create,
-    new AggregatedMetricWrapFunction(metric_name, AverageAggregate.getAggregationType())
+    new AggregatedMetricWrapFunction(topicName, AverageAggregate.getAggregationType())
   )
 
   val p99Stream = windowedStream.aggregate(
     P99Aggregate.create,
-    new AggregatedMetricWrapFunction(metric_name, P99Aggregate.getAggregationType())
+    new AggregatedMetricWrapFunction(topicName, P99Aggregate.getAggregationType())
   )
 
   val sumStream = windowedStream.sum("value")
-    .map{ msg => new AggregatedMetric(metric_name, "SUM", msg.value, msg.deviceName)}
+    .map{ msg => new AggregatedMetric(topicName, "SUM", msg.value, msg.deviceName)}
 
   val minStream = windowedStream.minBy("value")
-    .map{ msg => new AggregatedMetric(metric_name, "MIN", msg.value, msg.deviceName)}
+    .map{ msg => new AggregatedMetric(topicName, "MIN", msg.value, msg.deviceName)}
 
   val maxStream = windowedStream.maxBy("value")
-    .map{ msg => new AggregatedMetric(metric_name, "MAX", msg.value, msg.deviceName)}
+    .map{ msg => new AggregatedMetric(topicName, "MAX", msg.value, msg.deviceName)}
 
   averageStream.print()
   p99Stream.print()
