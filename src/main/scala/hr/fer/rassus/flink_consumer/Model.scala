@@ -2,11 +2,10 @@ package hr.fer.rassus.flink_consumer
 
 import spray.json._
 
-case class KafkaMessage(var value: Double, var deviceName: String)
-case class AggregatedMetric(var metricName: String, var  aggregationType: String,
-                            var value: Double, var deviceName: String)
+case class Metric(value: Double, deviceName: String)
+case class AggregatedMetric(deviceName: String, metricName: String, aggregationType: String, value: Double)
 
-trait ModelJsonProtocol extends DefaultJsonProtocol {
-  implicit val kafkaMessageFormat = jsonFormat2(KafkaMessage)
+object ModelJsonProtocol extends DefaultJsonProtocol {
+  implicit val kafkaMessageFormat = jsonFormat2(Metric)
   implicit val aggregatedMetricFormat = jsonFormat4(AggregatedMetric)
 }

@@ -1,6 +1,6 @@
 package hr.fer.rassus.flink_consumer.flink.functions.aggregate
 
-import hr.fer.rassus.flink_consumer.KafkaMessage
+import hr.fer.rassus.flink_consumer.Metric
 import org.apache.flink.api.common.functions.AggregateFunction
 
 import scala.collection.mutable.ArrayBuffer
@@ -8,10 +8,10 @@ import scala.collection.mutable.ArrayBuffer
 
 case class P99Accumulator(buffer: ArrayBuffer[Double] = ArrayBuffer.empty[Double])
 
-class P99Aggregate extends AggregateFunction[KafkaMessage, P99Accumulator, Double] {
+class P99Aggregate extends AggregateFunction[Metric, P99Accumulator, Double] {
   override def createAccumulator() = new P99Accumulator
 
-  override def add(message: KafkaMessage, accumulator: P99Accumulator) = {
+  override def add(message: Metric, accumulator: P99Accumulator) = {
     accumulator.buffer += message.value
     accumulator
   }

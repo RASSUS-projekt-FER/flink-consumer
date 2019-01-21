@@ -4,30 +4,29 @@ import java.util.Properties
 
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
-import spray.json._
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
 import hr.fer.rassus.flink_consumer.flink.functions.aggregate._
 import hr.fer.rassus.flink_consumer.flink.functions.process.window.AggregatedMetricWrapFunction
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer
-import org.apache.flink.streaming.util.serialization.{KeyedDeserializationSchema, SimpleStringSchema}
+import hr.fer.rassus.flink_consumer.flink.serialization.MetricDeserializationSchema
 
-object Job extends App with ModelJsonProtocol {
+object Job extends App {
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
 
   val properties = new Properties()
   properties.setProperty("bootstrap.servers", "localhost:9092")
   properties.setProperty("zookeeper.connect", "localhost:2181")
-  properties.setProperty("group.id", "test-consumer-group")
-  properties.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")  // probably wrong
-  properties.setProperty("value.deserializer", "org.apache.kafka.common.serialization.DoubleDeserializer")  // probably wrong
 
   val topicName: String = "cpu"  // can also configure list of topics
-  //val deserializationSchema = new KeyedDeserializationSchema[String, Double] {?}(?)
-  val deserializationSchema = new SimpleStringSchema()  // wrong
 
-  val cpuUsages = env.addSource(new FlinkKafkaConsumer[String](topicName, deserializationSchema, properties))
+  val topicNames = Vector("cpu", "ram", "tcp-sent")
+  println("hello2")
 
-  val windowedStream = cpuUsages.map { _.parseJson.convertTo[KafkaMessage] }
+  val deserializationSchema = new MetricDeserializationSchema(topicName)
+
+  val cpuUsages = env.addSource(new FlinkKafkaConsumer[Metric](topicName, deserializationSchema, properties))
+
+  val windowedStream = cpuUsages
     .keyBy(_.deviceName)
     .timeWindow(Time.seconds(60))
 
@@ -42,13 +41,13 @@ object Job extends App with ModelJsonProtocol {
   )
 
   val sumStream = windowedStream.sum("value")
-    .map{ msg => new AggregatedMetric(topicName, "SUM", msg.value, msg.deviceName)}
+    .map{ msg => new AggregatedMetric(msg.deviceName, topicName, "SUM", msg.value)}
 
   val minStream = windowedStream.minBy("value")
-    .map{ msg => new AggregatedMetric(topicName, "MIN", msg.value, msg.deviceName)}
+    .map{ msg => new AggregatedMetric(msg.deviceName, topicName, "MIN", msg.value)}
 
   val maxStream = windowedStream.maxBy("value")
-    .map{ msg => new AggregatedMetric(topicName, "MAX", msg.value, msg.deviceName)}
+    .map{ msg => new AggregatedMetric(msg.deviceName, topicName, "MAX", msg.value)}
 
   averageStream.print()
   p99Stream.print()
