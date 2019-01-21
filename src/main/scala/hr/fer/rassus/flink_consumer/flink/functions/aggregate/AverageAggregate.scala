@@ -3,7 +3,6 @@ package hr.fer.rassus.flink_consumer.flink.functions.aggregate
 import hr.fer.rassus.flink_consumer.Metric
 import org.apache.flink.api.common.functions.AggregateFunction
 
-
 case class AverageAccumulator(var sum: Double = 0.0, var cnt: Int = 0)
 
 class AverageAggregate extends AggregateFunction[Metric, AverageAccumulator, Double]{
@@ -22,6 +21,6 @@ class AverageAggregate extends AggregateFunction[Metric, AverageAccumulator, Dou
 }
 
 object AverageAggregate extends AggregationTypeGetter {
-  override def getAggregationType(): String = "AVERAGE"
+  def getAggregationType(): String = "avg"
   def create(): AverageAggregate = new AverageAggregate
 }
