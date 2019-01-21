@@ -1,12 +1,12 @@
 package hr.fer.rassus.flink_consumer
 
+import hr.fer.rassus.flink_consumer.flink.functions.map.StringInputMapFunction
+import hr.fer.rassus.flink_consumer.flink.functions.process.window.AggregatedMetricWrapFunction
+import hr.fer.rassus.flink_consumer.flink.functions.sink.MetricDashboardSink
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
-import hr.fer.rassus.flink_consumer.functions.aggregate._
-import hr.fer.rassus.flink_consumer.functions.process.window.AggregatedMetricWrapFunction
-import hr.fer.rassus.flink_consumer.functions.sink.MetricDashboardSink
-import hr.fer.rassus.flink_consumer.functions.map.StringInputMapFunction
+import hr.fer.rassus.flink_consumer.flink.functions.aggregate._
 
 object Job extends App {
 

@@ -1,7 +1,7 @@
-package hr.fer.rassus.flink_consumer.functions.sink
+package hr.fer.rassus.flink_consumer.flink.functions.sink
 
-import hr.fer.rassus.flink_consumer.{AggregatedMetric, AggregatedMetricObservation}
 import hr.fer.rassus.flink_consumer.ModelJsonProtocol._
+import hr.fer.rassus.flink_consumer.{AggregatedMetric, AggregatedMetricObservation}
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction
 import scalaj.http.Http
 import spray.json._
