@@ -19,8 +19,3 @@ class AverageAggregate extends AggregateFunction[Metric, AverageAccumulator, Dou
   override def merge(a: AverageAccumulator, b: AverageAccumulator) =
     new AverageAccumulator(a.sum + b.sum, a.cnt + b.cnt)
 }
-
-object AverageAggregate extends AggregationTypeGetter {
-  def getAggregationType(): String = "avg"
-  def create(): AverageAggregate = new AverageAggregate
-}

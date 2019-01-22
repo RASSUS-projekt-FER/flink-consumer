@@ -9,7 +9,7 @@ case class P99Accumulator(buffer: ArrayBuffer[Double] = ArrayBuffer.empty[Double
 class P99Aggregate extends AggregateFunction[Metric, P99Accumulator, Double] {
   override def createAccumulator() = new P99Accumulator
 
-  override def add(message: Metric, accumulator: P99Accumulator) = {
+  override def add(message: Metric, accumulator: P99Accumulator): P99Accumulator = {
     accumulator.buffer += message.value
     accumulator
   }
@@ -21,11 +21,5 @@ class P99Aggregate extends AggregateFunction[Metric, P99Accumulator, Double] {
   }
 
   override def merge(a: P99Accumulator, b: P99Accumulator) =
-    new P99Accumulator(a.buffer ++ b.buffer)
-}
-
-
-object P99Aggregate extends AggregationTypeGetter {
-  def getAggregationType(): String = "P99"
-  def create(): P99Aggregate = new P99Aggregate
+    P99Accumulator(a.buffer ++ b.buffer)
 }

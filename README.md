@@ -21,3 +21,12 @@ nc -l 9000
 (terminal 1) bin\start-cluster.bat  
 (terminal 1) bin\flink run ..\flink-consumer\target\scala-2.11\flink-consumer-assembly-0.1-SNAPSHOT.jar
 
+
+### Push messages to kafka
+#### Control message
+(terminal 1) kafka\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic controls-topic  
+{"deviceName": "pc-1", "metricName": "cpu", "aggregationType": "P99", "operator": "GT", "threshold": 0.85} 
+
+#### Metric message
+(terminal 2) kafka\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic controls-topic  
+{"deviceName": "pc-1", "metricName": "cpu", "value": 0.9}
