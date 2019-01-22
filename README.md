@@ -28,5 +28,5 @@ nc -l 9000
 {"deviceName": "pc-1", "metricName": "cpu", "aggregationType": "P99", "operator": "GT", "threshold": 0.85} 
 
 #### Metric message
-(terminal 2) kafka\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic controls-topic  
+(terminal 2) kafka\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic metrics-topic  
 {"deviceName": "pc-1", "metricName": "cpu", "value": 0.9}
