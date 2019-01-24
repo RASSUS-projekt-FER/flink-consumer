@@ -67,6 +67,7 @@ object Job extends App {
       .print()
 
   aggregatedMetrics.addSink(new MetricDashboardSink)
+      .name("Metric Dashboard Sink")
 
   env.execute("Scala Rassus Flink Consumer")
 }
