@@ -22,11 +22,9 @@ class QualifierFunction extends FlatMapFunction[FilteredControl, QualifiedContro
 
   override def flatMap(value: FilteredControl, out: Collector[QualifiedControl]): Unit = {
     value.controls.foreach{ control =>
-      if (value.metric.aggregationType == control.aggregationType) {
-        val result = qualify(control.operator, control.threshold, value.metric.value)
-        if (result) {
-          out.collect(QualifiedControl(value.metric, control))
-        }
+      val result = qualify(control.operator, control.threshold, value.metric.value)
+      if (result) {
+        out.collect(QualifiedControl(value.metric, control))
       }
     }
   }

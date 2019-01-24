@@ -8,17 +8,18 @@ import scala.collection.mutable
 
 class FilterFunction extends RichCoFlatMapFunction[Control, AggregatedMetric, FilteredControl] {
 
-  var configs = new mutable.ListBuffer[Control]()
+  var controlConfigs = new mutable.ListBuffer[Control]()
 
-  override def flatMap1(value: Control, out: Collector[FilteredControl]): Unit = configs.append(value)
+  override def flatMap1(value: Control, out: Collector[FilteredControl]): Unit = controlConfigs.append(value)
 
   override def flatMap2(value: AggregatedMetric, out: Collector[FilteredControl]): Unit = {
-    val eventConfigs = configs.filter{
-      x => (x.deviceName == value.deviceName) || (x.metricName != value.metricName)
+    val aggregatedMetricConfigs = controlConfigs.filter{
+      x => (x.deviceName == value.deviceName) && (x.metricName == value.metricName) &&
+        (x.aggregationType == value.aggregationType)
     }
 
-    if (eventConfigs.size > 0) {
-      out.collect(FilteredControl(value, eventConfigs.toList))
+    if (aggregatedMetricConfigs.size > 0) {
+      out.collect(FilteredControl(value, aggregatedMetricConfigs.toList))
     }
   }
 }
